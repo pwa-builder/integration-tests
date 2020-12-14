@@ -9,7 +9,7 @@ describe(
 
     beforeEach(async () => {
       page = await global.__BROWSER__.newPage();
-      await page.goto('https://preview.pwabuilder.com/');
+      await page.goto('https://www.pwabuilder.com/');
     }, timeout);
 
     afterAll(async () => {
