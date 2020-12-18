@@ -1,16 +1,23 @@
 const timeout = 120000;
 
 require('expect-puppeteer');
+const edgePaths = require("edge-paths");
+
+const EDGE_PATH = edgePaths.getEdgePath();
 
 describe(
   'Run URLs that are a PWA',
   () => {
     let page;
     
-    beforeEach(async () => {
-      page = await global.__BROWSER__.newPage();
+    beforeAll(async () => {
+      const browser = await chromium.launch({
+        executablePath: EDGE_PATH
+      });
+      const page = await browser.newPage();
+      
       await page.goto('https://www.pwabuilder.com/');
-    }, timeout);
+    })
 
     afterAll(async () => {
       await page.close()
