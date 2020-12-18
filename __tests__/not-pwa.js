@@ -1,42 +1,48 @@
 const timeout = 120000;
 
-require('expect-puppeteer');
+const { chromium } = require('playwright');
+const edgePaths = require("edge-paths");
+
+const EDGE_PATH = edgePaths.getEdgePath();
+
+const testURLs = [
+  'https://example.com',
+  'https://cnn.com',
+]
 
 describe(
-  'Run URLs that are not a PWA',
+  'Run URLs that are a NOT a PWA',
   () => {
     let page;
+    let browser;
 
-    beforeEach(async () => {
-      page = await global.__BROWSER__.newPage();
-      await page.goto('https://www.pwabuilder.com/');
-    }, timeout);
-
-    afterAll(async () => {
-      await page.close()
+    beforeAll(async () => {
+      browser = await chromium.launch({
+        executablePath: EDGE_PATH
+      });
     });
 
-    it('should load example.com with a score of 20', async () => {
-      await page.type('#getStartedInput', 'https://example.com');
-      await expect(page).toClick('button', { text: 'Start' });
+    beforeEach(async () => {
+      page = await browser.newPage();
+      await page.goto('https://www.pwabuilder.com/');
+    });
 
-      await expect(page).toMatchElement('#infoSection h2', { timeout: timeout, text: 'Hub' });
-    }, timeout);
+    afterEach(async () => {
+      await page.close();
+    })
 
-    it('should load https://github.com with a score of 50', async () => {
-      await page.type('#getStartedInput', 'https://github.com');
-      await expect(page).toClick('button', { text: 'Start' });
+    afterAll(async () => {
+      await browser.close()
+    });
 
-      await expect(page).toMatchElement('#infoSection h2', { timeout: timeout, text: 'Hub' });
-    }, timeout);
+    testURLs.map((url) => {
+      it(`should load ${url} and validate as NOT a PWA`, async () => {
+        await page.fill('#getStartedInput', url);
+        await page.click('button#getStartedButton');
 
-    it('should load https://ebay.com with a score of 35', async () => {
-      await page.type('#getStartedInput', 'https://ebay.com');
-      await expect(page).toClick('button', { text: 'Start' });
-
-      await expect(page).toMatchElement('#infoSection h2', { timeout: timeout, text: 'Hub' });
-    }, timeout);
-
+        await expect(page).toHaveSelector('#infoSection', { timeout: timeout });
+      }, timeout);
+    });
   },
   timeout
 )

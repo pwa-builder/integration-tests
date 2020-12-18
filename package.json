@@ -10,7 +10,11 @@
     "rimraf": "^3.0.2"
   },
   "dependencies": {
+    "edge-paths": "^2.1.0",
+    "expect-playwright": "^0.2.6",
     "expect-puppeteer": "^4.4.0",
-    "mkdirp": "^1.0.4"
+    "jest-playwright-preset": "^1.4.2",
+    "mkdirp": "^1.0.4",
+    "playwright": "^1.7.0"
   }
 }

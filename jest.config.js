@@ -1,5 +1,4 @@
 module.exports = {
-  globalSetup: './setup.js',
-  globalTeardown: './teardown.js',
-  testEnvironment: './puppeteer_environment.js',
+  preset: 'jest-playwright-preset',
+  "setupFilesAfterEnv": ["expect-playwright"]
 }
