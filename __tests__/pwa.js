@@ -1,9 +1,6 @@
 const timeout = 120000;
 
 const { chromium } = require('playwright');
-const edgePaths = require("edge-paths");
-
-const EDGE_PATH = edgePaths.getEdgePath();
 
 const testURLs = [
   'https://webboard.app',
@@ -22,7 +19,7 @@ describe(
 
     beforeAll(async () => {
       browser = await chromium.launch({
-        executablePath: EDGE_PATH
+        headless: true
       });
     });
 
